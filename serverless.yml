@@ -1,0 +1,26 @@
+#组件信息
+app: image-watermark
+component: scf
+name: watermarker
+
+inputs:
+  name: ${app}-${name}  #函数名称
+  namespace: default  #命名空间
+  src: ./       #代码路径
+  handler: Watermarker.handler
+  runtime: Python3.6
+  region: ap-guangzhou  # 云函数所在区域
+  description: '将图片打上水印文字'
+  timeout: 10
+  events: # 触发器
+    - cos:
+        name: ${name}-appid.cos.ap-guangzhou.myqcloud.com # 此处修改为自己的bucket
+        parameters:
+            bucket: ${name}-appid.cos.ap-guangzhou.myqcloud.com
+            filter:
+              suffix: .png
+            events: cos:ObjectCreated:*
+            enable: true
+
+
+
